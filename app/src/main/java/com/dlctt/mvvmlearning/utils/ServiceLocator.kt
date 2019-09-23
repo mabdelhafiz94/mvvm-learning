@@ -1,6 +1,5 @@
 package com.dlctt.mvvmlearning.utils
 
-import android.content.Context
 import com.dlctt.mvvmlearning.model.TasksDataSource
 import com.dlctt.mvvmlearning.model.TasksRepo
 import com.dlctt.mvvmlearning.model.remote.TasksRemoteDataSource
@@ -26,7 +25,7 @@ class ServiceLocator private constructor() {
         TasksRemoteDataSource(backendApi)
     }
 
-    private val tasksRepo: TasksDataSource by lazy {
+    val tasksRepo: TasksDataSource by lazy {
         TasksRepo(tasksRemoteDataSource)
     }
 

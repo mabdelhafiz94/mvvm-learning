@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.dlctt.mvvmlearning">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MVVMLearningApp"
         android:allowBackup="false"
