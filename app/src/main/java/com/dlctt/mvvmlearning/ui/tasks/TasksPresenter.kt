@@ -3,9 +3,8 @@ package com.dlctt.mvvmlearning.ui.tasks
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.TasksDataSource
 import com.dlctt.mvvmlearning.utils.ServiceLocator
-import io.reactivex.SingleObserver
+import com.dlctt.mvvmlearning.utils.SingleObserverWrapper
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 class TasksPresenter(private val view: TasksContract.View) : TasksContract.Presenter {
 
@@ -15,26 +14,15 @@ class TasksPresenter(private val view: TasksContract.View) : TasksContract.Prese
         ServiceLocator.getServiceLocator().tasksRepo
     }
 
-
     override fun loadTasks() {
-        tasksRepo.getTasks().subscribe(object : SingleObserver<List<Task>> {
+        tasksRepo.getTasks()
+            .subscribe(object : SingleObserverWrapper<List<Task>>(view, compositeDisposable) {
+                override fun onComplete(t: List<Task>) {
+                    view.showLoading(false)
+                    view.onTasksLoaded(t)
+                }
 
-            override fun onSuccess(t: List<Task>) {
-                view.showLoading(false)
-                view.onTasksLoaded(t)
-            }
-
-            override fun onSubscribe(d: Disposable) {
-                view.showLoading(true)
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable) {
-                view.showLoading(false)
-                view.showDialogMessage(e.message ?: "Unknown Error: $e")
-            }
-
-        })
+            })
     }
 
 
