@@ -1,7 +1,8 @@
-package com.dlctt.mvvmlearning
+package com.dlctt.mvvmlearning.ui.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.dlctt.mvvmlearning.R
 
 class MainActivity : AppCompatActivity() {
 
