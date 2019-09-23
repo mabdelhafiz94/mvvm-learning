@@ -9,6 +9,7 @@ import com.dlctt.mvvmlearning.utils.DialogManager
 import kotlinx.android.synthetic.main.activity_tasks.*
 
 class TasksActivity : AppCompatActivity(), TasksContract.View {
+
     private val presenter: TasksContract.Presenter by lazy {
         TasksPresenter(this)
     }
