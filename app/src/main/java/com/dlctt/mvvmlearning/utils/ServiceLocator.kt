@@ -8,6 +8,10 @@ import com.dlctt.mvvmlearning.model.remote.retrofit.ServiceBuilder
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
+/*
+* Singleton implementation done this way to allow arguments to be passed through constructor
+* and init method
+*/
 class ServiceLocator private constructor() {
 
     private val backendApi: BackendApi by lazy {
