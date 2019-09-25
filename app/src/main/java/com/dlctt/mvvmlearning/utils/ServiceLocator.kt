@@ -39,7 +39,7 @@ class ServiceLocator private constructor() {
         private var instance: ServiceLocator? = null
 
         @JvmStatic
-        fun getServiceLocator(): ServiceLocator {
+        fun getInstance(): ServiceLocator {
             if (instance == null)
                 throw UnImplementedException("ServiceLocator must be initialized first using init method.")
 

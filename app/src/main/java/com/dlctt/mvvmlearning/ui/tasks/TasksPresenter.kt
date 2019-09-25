@@ -11,7 +11,7 @@ class TasksPresenter(private val view: TasksContract.View) : TasksContract.Prese
     private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
 
     private val tasksRepo: TasksDataSource by lazy {
-        ServiceLocator.getServiceLocator().tasksRepo
+        ServiceLocator.getInstance().tasksRepo
     }
 
     override fun loadTasks() {
@@ -24,7 +24,6 @@ class TasksPresenter(private val view: TasksContract.View) : TasksContract.Prese
 
             })
     }
-
 
     override fun unsubscribe() {
         compositeDisposable.clear()

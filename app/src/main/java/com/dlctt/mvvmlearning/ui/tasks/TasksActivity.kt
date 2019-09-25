@@ -24,10 +24,17 @@ class TasksActivity : AppCompatActivity(), TasksContract.View, ListItemCallback<
     }
 
     private fun setupViews() {
-        tasks_list.layoutManager = LinearLayoutManager(this)
-        tasks_list.itemAnimator = DefaultItemAnimator()
-        tasks_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        tasks_list.adapter = tasksAdapter
+        with(tasks_list) {
+            layoutManager = LinearLayoutManager(this@TasksActivity)
+            itemAnimator = DefaultItemAnimator()
+            addItemDecoration(
+                DividerItemDecoration(
+                    this@TasksActivity,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+            adapter = tasksAdapter
+        }
     }
 
     override fun onTasksLoaded(tasks: List<Task>) {

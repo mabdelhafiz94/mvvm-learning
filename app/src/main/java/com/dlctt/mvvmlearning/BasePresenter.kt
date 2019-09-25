@@ -1,6 +1,5 @@
 package com.dlctt.mvvmlearning
 
-interface BasePresenter
-{
+interface BasePresenter {
     fun unsubscribe()
 }
