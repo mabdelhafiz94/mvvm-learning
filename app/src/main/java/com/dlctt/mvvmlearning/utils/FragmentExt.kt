@@ -1,9 +1,12 @@
 package com.dlctt.mvvmlearning.utils
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
 import android.content.DialogInterface
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import com.dlctt.mvvmlearning.R
 
@@ -72,4 +75,20 @@ fun Fragment.statusBarColorToSolidWhite() {
     if (activity != null) {
         (activity as AppCompatActivity).statusBarColorToSolidWhite()
     }
+}
+
+fun Fragment.handleLoading(loadingLiveData: LiveData<Boolean>, loadingIndicator: View) {
+    loadingLiveData.observe(viewLifecycleOwner, Observer { loading ->
+        if (loading!!)
+            loadingIndicator.show()
+        else
+            loadingIndicator.hide()
+    })
+}
+
+fun Fragment.handleErrorMsg(errorMsgLiveData: LiveData<String>) {
+    errorMsgLiveData.observe(viewLifecycleOwner, Observer { msg ->
+        if (msg!!.isNotEmpty())
+            showToast(msg)
+    })
 }

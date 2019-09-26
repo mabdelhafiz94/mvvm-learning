@@ -1,6 +1,5 @@
 package com.dlctt.mvvmlearning.ui.tasks
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -14,6 +13,8 @@ import android.view.ViewGroup
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.utils.ListItemCallback
+import com.dlctt.mvvmlearning.utils.handleErrorMsg
+import com.dlctt.mvvmlearning.utils.handleLoading
 import com.dlctt.mvvmlearning.utils.showToast
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
@@ -42,8 +43,15 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupViews()
-        viewModel.loadTasks()
-            .observe(viewLifecycleOwner, Observer { tasksAdapter.submitList(it ?: emptyList()) })
+
+        with(viewModel) {
+            loadTasks().observe(viewLifecycleOwner, Observer { list ->
+                tasksAdapter.submitList(list ?: emptyList())
+            })
+
+            handleErrorMsg(getErrorMsgLiveData())
+            handleLoading(isLoadingLiveData(), loading_indicator)
+        }
     }
 
     private fun setupViews() {

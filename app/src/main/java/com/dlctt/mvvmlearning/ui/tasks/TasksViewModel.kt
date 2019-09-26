@@ -23,23 +23,44 @@ class TasksViewModel : ViewModel() {
 
     private val tasksLiveData: MutableLiveData<List<Task>> by lazy { MutableLiveData<List<Task>>() }
 
+    private val errorMsgLiveData: MutableLiveData<String> by lazy {
+        MutableLiveData<String>().apply {
+            value = String()
+        }
+    }
+    private val isLoadingLiveData: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>().apply { value = false }
+    }
+
     fun loadTasks(): LiveData<List<Task>> {
         tasksRepo.getTasks().subscribe(object : SingleObserver<List<Task>> {
             override fun onSuccess(t: List<Task>) {
+                isLoadingLiveData.value = false
                 tasksLiveData.value = t
             }
 
             override fun onSubscribe(d: Disposable) {
                 compositeDisposable.add(d)
+                isLoadingLiveData.value = true
             }
 
             override fun onError(e: Throwable) {
                 Log.e("onError", e.message)
+                isLoadingLiveData.value = false
+                errorMsgLiveData.value = e.message
                 tasksLiveData.value = emptyList()
             }
         })
 
         return tasksLiveData
+    }
+
+    fun getErrorMsgLiveData(): LiveData<String> {
+        return errorMsgLiveData
+    }
+
+    fun isLoadingLiveData(): LiveData<Boolean> {
+        return isLoadingLiveData
     }
 
     override fun onCleared() {

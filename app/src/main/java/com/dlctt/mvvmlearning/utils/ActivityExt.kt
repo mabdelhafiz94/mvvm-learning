@@ -3,6 +3,7 @@ package com.dlctt.mvvmlearning.utils
 import android.app.Activity
 import android.content.DialogInterface
 import android.os.Build
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -84,4 +85,30 @@ fun AppCompatActivity.statusBarColorToSolidWhite() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
+}
+
+fun AppCompatActivity.navigateToFragment(fragment: Fragment, firstNavigateToFragment: Boolean) {
+    val tag = fragment.javaClass.simpleName
+
+    if (!isFragmentVisible(tag)) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        fragmentTransaction.setCustomAnimations(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out
+        )
+
+        fragmentTransaction.replace(R.id.fragments_main_container, fragment, tag)
+
+        if (!firstNavigateToFragment)
+            fragmentTransaction.addToBackStack(tag)
+
+        fragmentTransaction.commit()
+    }
+}
+
+fun AppCompatActivity.isFragmentVisible(name: String): Boolean {
+    val fragment = supportFragmentManager.findFragmentByTag(name)
+    return fragment != null && fragment.isResumed
 }
