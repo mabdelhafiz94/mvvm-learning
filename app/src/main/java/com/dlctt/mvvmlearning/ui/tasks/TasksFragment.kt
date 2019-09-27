@@ -25,13 +25,8 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     private val tasksAdapter: TasksAdapter by lazy { TasksAdapter(this) }
 
-    private val viewModel: TasksViewModel by lazy {
+    private val viewModel: TasksViewModel =
         ViewModelProviders.of(this).get(TasksViewModel::class.java)
-    }
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

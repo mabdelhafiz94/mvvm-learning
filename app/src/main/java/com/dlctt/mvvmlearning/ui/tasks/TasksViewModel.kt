@@ -24,12 +24,12 @@ class TasksViewModel : ViewModel() {
     private val tasksLiveData: MutableLiveData<List<Task>> by lazy { MutableLiveData<List<Task>>() }
 
     private val errorMsgLiveData: MutableLiveData<String> by lazy {
-        MutableLiveData<String>().apply {
-            value = String()
+        MutableLiveData<String>().also {
+            it.value = String()
         }
     }
     private val isLoadingLiveData: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>().apply { value = false }
+        MutableLiveData<Boolean>().also { it.value = false }
     }
 
     fun loadTasks(): LiveData<List<Task>> {
