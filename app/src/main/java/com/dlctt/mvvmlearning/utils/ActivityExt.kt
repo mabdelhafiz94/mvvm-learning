@@ -94,10 +94,10 @@ fun AppCompatActivity.navigateToFragment(fragment: Fragment, firstNavigateToFrag
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        fragmentTransaction.setCustomAnimations(
-            android.R.anim.fade_in,
-            android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out
-        )
+//        fragmentTransaction.setCustomAnimations(
+//            android.R.anim.fade_in,
+//            android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out
+//        )
 
         fragmentTransaction.replace(R.id.fragments_main_container, fragment, tag)
 

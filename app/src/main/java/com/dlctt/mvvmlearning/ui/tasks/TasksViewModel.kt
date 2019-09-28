@@ -3,7 +3,6 @@ package com.dlctt.mvvmlearning.ui.tasks
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.TasksDataSource
 import com.dlctt.mvvmlearning.utils.ServiceLocator
@@ -22,9 +21,7 @@ class TasksViewModel : ViewModel() {
         ServiceLocator.getInstance().tasksRepo
     }
 
-    private val tasksLiveData: MutableLiveData<List<Task>> by lazy {
-        MutableLiveData<List<Task>>().also { loadTasks() }
-    }
+    private val tasksLiveData: MutableLiveData<List<Task>> = MutableLiveData()
 
     private val errorMsgLiveData: MutableLiveData<String> by lazy {
         MutableLiveData<String>().also {
@@ -35,16 +32,18 @@ class TasksViewModel : ViewModel() {
         MutableLiveData<Boolean>().also { it.value = false }
     }
 
+    init {
+        loadTasks()
+    }
+
     private fun loadTasks() {
         tasksRepo.getTasks().subscribe(object : SingleObserver<List<Task>> {
             override fun onSuccess(t: List<Task>) {
-                Log.v("VIRUS", "onSuccess")
                 isLoadingLiveData.value = false
                 tasksLiveData.value = t
             }
 
             override fun onSubscribe(d: Disposable) {
-                Log.v("VIRUS", "onSubscribe")
                 compositeDisposable.add(d)
                 isLoadingLiveData.value = true
             }
