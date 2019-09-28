@@ -25,8 +25,9 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     private val tasksAdapter: TasksAdapter by lazy { TasksAdapter(this) }
 
-    private val viewModel: TasksViewModel =
+    private val viewModel: TasksViewModel by lazy {
         ViewModelProviders.of(this).get(TasksViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,15 +39,6 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupViews()
-
-        with(viewModel) {
-            loadTasks().observe(viewLifecycleOwner, Observer { list ->
-                tasksAdapter.submitList(list ?: emptyList())
-            })
-
-            handleErrorMsg(getErrorMsgLiveData())
-            handleLoading(isLoadingLiveData(), loading_indicator)
-        }
     }
 
     private fun setupViews() {
@@ -55,6 +47,22 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = tasksAdapter
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        observeLiveData()
+    }
+
+    private fun observeLiveData() {
+        with(viewModel) {
+            getTasksLiveData().observe(viewLifecycleOwner, Observer { list ->
+                tasksAdapter.submitList(list ?: emptyList())
+            })
+
+            handleErrorMsg(getErrorMsgLiveData())
+            handleLoading(isLoadingLiveData(), loading_indicator)
         }
     }
 

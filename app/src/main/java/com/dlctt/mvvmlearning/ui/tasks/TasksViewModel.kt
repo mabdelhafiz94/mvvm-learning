@@ -7,6 +7,7 @@ import android.util.Log
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.TasksDataSource
 import com.dlctt.mvvmlearning.utils.ServiceLocator
+import com.dlctt.mvvmlearning.utils.handleError
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -21,7 +22,9 @@ class TasksViewModel : ViewModel() {
         ServiceLocator.getInstance().tasksRepo
     }
 
-    private val tasksLiveData: MutableLiveData<List<Task>> by lazy { MutableLiveData<List<Task>>() }
+    private val tasksLiveData: MutableLiveData<List<Task>> by lazy {
+        MutableLiveData<List<Task>>().also { loadTasks() }
+    }
 
     private val errorMsgLiveData: MutableLiveData<String> by lazy {
         MutableLiveData<String>().also {
@@ -32,7 +35,7 @@ class TasksViewModel : ViewModel() {
         MutableLiveData<Boolean>().also { it.value = false }
     }
 
-    fun loadTasks(): LiveData<List<Task>> {
+    private fun loadTasks() {
         tasksRepo.getTasks().subscribe(object : SingleObserver<List<Task>> {
             override fun onSuccess(t: List<Task>) {
                 isLoadingLiveData.value = false
@@ -45,13 +48,14 @@ class TasksViewModel : ViewModel() {
             }
 
             override fun onError(e: Throwable) {
-                Log.e("onError", e.message)
                 isLoadingLiveData.value = false
-                errorMsgLiveData.value = e.message
+                errorMsgLiveData.value = handleError(e)
                 tasksLiveData.value = emptyList()
             }
         })
+    }
 
+    fun getTasksLiveData(): LiveData<List<Task>> {
         return tasksLiveData
     }
 
