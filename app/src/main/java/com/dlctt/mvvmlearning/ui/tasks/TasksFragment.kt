@@ -7,15 +7,13 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.model.DTO.Task
-import com.dlctt.mvvmlearning.utils.ListItemCallback
-import com.dlctt.mvvmlearning.utils.handleErrorMsg
-import com.dlctt.mvvmlearning.utils.handleLoading
-import com.dlctt.mvvmlearning.utils.showToast
+import com.dlctt.mvvmlearning.utils.*
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
 /**
@@ -52,13 +50,15 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        Log.v("VIRUS", "observeLiveData")
         observeLiveData()
     }
 
     private fun observeLiveData() {
         with(viewModel) {
             getTasksLiveData().observe(viewLifecycleOwner, Observer { list ->
-                tasksAdapter.submitList(list ?: emptyList())
+                Log.v("VIRUS", "OnChanged")
+                tasksAdapter.submitList(list)
             })
 
             handleErrorMsg(getErrorMsgLiveData())

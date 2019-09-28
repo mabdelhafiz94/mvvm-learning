@@ -38,11 +38,13 @@ class TasksViewModel : ViewModel() {
     private fun loadTasks() {
         tasksRepo.getTasks().subscribe(object : SingleObserver<List<Task>> {
             override fun onSuccess(t: List<Task>) {
+                Log.v("VIRUS", "onSuccess")
                 isLoadingLiveData.value = false
                 tasksLiveData.value = t
             }
 
             override fun onSubscribe(d: Disposable) {
+                Log.v("VIRUS", "onSubscribe")
                 compositeDisposable.add(d)
                 isLoadingLiveData.value = true
             }
