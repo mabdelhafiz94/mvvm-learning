@@ -3,10 +3,11 @@ package com.dlctt.mvvmlearning.ui.tasks
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.TasksDataSource
 import com.dlctt.mvvmlearning.utils.ServiceLocator
-import com.dlctt.mvvmlearning.utils.handleError
+import com.dlctt.mvvmlearning.utils.parseException
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -21,15 +22,8 @@ class TasksViewModel : ViewModel() {
         ServiceLocator.getInstance().tasksRepo
     }
 
-    private val tasksLiveData: MutableLiveData<List<Task>> = MutableLiveData()
-
-    private val errorMsgLiveData: MutableLiveData<String> by lazy {
-        MutableLiveData<String>().also {
-            it.value = String()
-        }
-    }
-    private val isLoadingLiveData: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>().also { it.value = false }
+    private val resourceLiveData: MutableLiveData<Resource<List<Task>>> by lazy {
+        MutableLiveData<Resource<List<Task>>>().also { it.value = Resource.Loading() }
     }
 
     init {
@@ -39,33 +33,22 @@ class TasksViewModel : ViewModel() {
     private fun loadTasks() {
         tasksRepo.getTasks().subscribe(object : SingleObserver<List<Task>> {
             override fun onSuccess(t: List<Task>) {
-                isLoadingLiveData.value = false
-                tasksLiveData.value = t
+                resourceLiveData.value = Resource.Success(t)
             }
 
             override fun onSubscribe(d: Disposable) {
                 compositeDisposable.add(d)
-                isLoadingLiveData.value = true
+                resourceLiveData.value = Resource.Loading()
             }
 
             override fun onError(e: Throwable) {
-                isLoadingLiveData.value = false
-                errorMsgLiveData.value = handleError(e)
-                tasksLiveData.value = emptyList()
+                resourceLiveData.value = Resource.Error(parseException(e))
             }
         })
     }
 
-    fun getTasksLiveData(): LiveData<List<Task>> {
-        return tasksLiveData
-    }
-
-    fun getErrorMsgLiveData(): LiveData<String> {
-        return errorMsgLiveData
-    }
-
-    fun isLoadingLiveData(): LiveData<Boolean> {
-        return isLoadingLiveData
+    fun getResourceLiveData(): LiveData<Resource<List<Task>>> {
+        return resourceLiveData
     }
 
     override fun onCleared() {

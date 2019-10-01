@@ -10,7 +10,7 @@ import java.net.SocketTimeoutException
 /**
  * Created by abdelhafiz on 9/28/19.
  */
-fun ViewModel.handleError(error: Throwable): String {
+fun ViewModel.parseException(error: Throwable): String {
     val TAG = this.javaClass.simpleName
     when (error) {
         is HttpException -> return if (error.code() == 401 || error.code() == 404) {

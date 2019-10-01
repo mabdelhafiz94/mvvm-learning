@@ -11,10 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dlctt.mvvmlearning.R
+import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.utils.ListItemCallback
-import com.dlctt.mvvmlearning.utils.handleErrorMsg
-import com.dlctt.mvvmlearning.utils.handleLoading
+import com.dlctt.mvvmlearning.utils.handleUIState
 import com.dlctt.mvvmlearning.utils.showToast
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
@@ -56,14 +56,12 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
     }
 
     private fun observeLiveData() {
-        with(viewModel) {
-            getTasksLiveData().observe(viewLifecycleOwner, Observer { list ->
-                tasksAdapter.submitList(list)
-            })
-
-            handleErrorMsg(getErrorMsgLiveData())
-            handleLoading(isLoadingLiveData(), loading_indicator)
-        }
+        viewModel.getResourceLiveData().observe(viewLifecycleOwner, Observer { resource ->
+            handleUIState(resource, loading_indicator)
+            if (resource is Resource.Success) {
+                tasksAdapter.submitList(resource.data)
+            }
+        })
     }
 
     override fun onItemClicked(item: Task) {
