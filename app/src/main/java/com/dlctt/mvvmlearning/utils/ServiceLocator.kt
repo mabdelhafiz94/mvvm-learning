@@ -2,9 +2,13 @@ package com.dlctt.mvvmlearning.utils
 
 import com.dlctt.mvvmlearning.model.TasksDataSource
 import com.dlctt.mvvmlearning.model.TasksRepo
+import com.dlctt.mvvmlearning.model.LoginDataSource
+import com.dlctt.mvvmlearning.model.LoginRepo
 import com.dlctt.mvvmlearning.model.remote.TasksRemoteDataSource
-import com.dlctt.mvvmlearning.model.remote.retrofit.BackendApi
+import com.dlctt.mvvmlearning.model.remote.retrofit.LoginApi
 import com.dlctt.mvvmlearning.model.remote.retrofit.ServiceBuilder
+import com.dlctt.mvvmlearning.model.remote.retrofit.TasksApi
+import com.dlctt.mvvmlearning.model.remote.retrofit.LoginRemoteDataSource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
@@ -14,23 +18,40 @@ import com.google.gson.GsonBuilder
 */
 class ServiceLocator private constructor() {
 
-    private val backendApi: BackendApi by lazy {
+    private val tasksApi: TasksApi by lazy {
         ServiceBuilder.buildService(
-            BackendApi::class.java,
+            TasksApi::class.java,
             jsonFactory
         )
     }
+
+    private val loginApi: LoginApi by lazy {
+        ServiceBuilder.buildService(
+            LoginApi::class.java,
+            jsonFactory
+        )
+    }
+
     private val jsonFactory: Gson by lazy {
         GsonBuilder()
             .setPrettyPrinting()
             .create()
     }
+
     private val tasksRemoteDataSource: TasksDataSource by lazy {
-        TasksRemoteDataSource(backendApi)
+        TasksRemoteDataSource(tasksApi)
+    }
+
+    private val loginRemoteDataSource: LoginDataSource by lazy {
+        LoginRemoteDataSource(loginApi)
     }
 
     val tasksRepo: TasksDataSource by lazy {
         TasksRepo(tasksRemoteDataSource)
+    }
+
+    val loginRepo: LoginDataSource by lazy {
+        LoginRepo(loginRemoteDataSource)
     }
 
 

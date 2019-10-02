@@ -1,16 +1,16 @@
-package com.dlctt.mvvmlearning.ui.tasks
+package com.dlctt.mvvmlearning.ui.login
 
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.utils.navigateToFragment
 
-class TasksActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tasks)
+        setContentView(R.layout.activity_login)
         if (savedInstanceState == null)
-            navigateToFragment(TasksFragment(), true, R.id.fragments_main_container)
+            navigateToFragment(LoginFragment(), true, R.id.login_fragments_container)
     }
 }

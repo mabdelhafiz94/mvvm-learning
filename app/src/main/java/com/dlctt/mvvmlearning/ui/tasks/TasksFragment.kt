@@ -57,7 +57,7 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     private fun observeLiveData() {
         viewModel.getResourceLiveData().observe(viewLifecycleOwner, Observer { resource ->
-            handleUIState(resource, loading_indicator)
+            handleUIState(resource, loading_indicator, true)
             if (resource is Resource.Success) {
                 tasksAdapter.submitList(resource.data)
             }

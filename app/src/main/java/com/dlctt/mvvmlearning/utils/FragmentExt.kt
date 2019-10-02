@@ -11,7 +11,8 @@ import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.Resource.Error
 import com.dlctt.mvvmlearning.model.DTO.Resource.Loading
 
-fun Fragment.showDialog(message: String) {
+fun Fragment.showDialog(message: String?) {
+    if (message == null) return
     val context = this.context
     if (context != null) {
         val dialog = AlertDialog.Builder(context)
@@ -80,13 +81,20 @@ fun Fragment.statusBarColorToSolidWhite() {
     }
 }
 
-fun <T> Fragment.handleUIState(resource: Resource<T>?, loadingIndicator: View) {
+fun <T> Fragment.handleUIState(
+    resource: Resource<T>?,
+    loadingIndicator: View,
+    useToastForMsgs: Boolean
+) {
     if (resource is Loading)
         loadingIndicator.show()
     else
         loadingIndicator.hide()
 
     if (resource is Error) {
-        showToast(resource.message)
+        if (useToastForMsgs)
+            showToast(resource.message)
+        else
+            showDialog(resource.message)
     }
 }

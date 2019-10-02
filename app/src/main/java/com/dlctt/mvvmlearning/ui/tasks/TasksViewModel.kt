@@ -47,9 +47,7 @@ class TasksViewModel : ViewModel() {
         })
     }
 
-    fun getResourceLiveData(): LiveData<Resource<List<Task>>> {
-        return resourceLiveData
-    }
+    fun getResourceLiveData(): LiveData<Resource<List<Task>>> = resourceLiveData
 
     override fun onCleared() {
         compositeDisposable.clear()

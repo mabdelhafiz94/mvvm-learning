@@ -87,7 +87,11 @@ fun AppCompatActivity.statusBarColorToSolidWhite() {
     }
 }
 
-fun AppCompatActivity.navigateToFragment(fragment: Fragment, firstNavigateToFragment: Boolean) {
+fun AppCompatActivity.navigateToFragment(
+    fragment: Fragment,
+    firstNavigateToFragment: Boolean,
+    viewContainerId: Int
+) {
     val tag = fragment.javaClass.simpleName
 
     if (!isFragmentVisible(tag)) {
@@ -99,7 +103,7 @@ fun AppCompatActivity.navigateToFragment(fragment: Fragment, firstNavigateToFrag
 //            android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out
 //        )
 
-        fragmentTransaction.replace(R.id.fragments_main_container, fragment, tag)
+        fragmentTransaction.replace(viewContainerId, fragment, tag)
 
         if (!firstNavigateToFragment)
             fragmentTransaction.addToBackStack(tag)
