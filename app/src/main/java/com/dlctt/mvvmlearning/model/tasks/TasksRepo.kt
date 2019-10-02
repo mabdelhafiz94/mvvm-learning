@@ -1,9 +1,10 @@
-package com.dlctt.mvvmlearning.model
+package com.dlctt.mvvmlearning.model.tasks
 
 import com.dlctt.mvvmlearning.model.DTO.Task
 import io.reactivex.Single
 
-class TasksRepo(private val tasksRemoteDataSource: TasksDataSource) : TasksDataSource {
+class TasksRepo(private val tasksRemoteDataSource: TasksDataSource) :
+    TasksDataSource {
     private var online: Boolean = true
 
     override fun getTasks(): Single<List<Task>> {

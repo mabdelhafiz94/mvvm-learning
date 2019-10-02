@@ -5,7 +5,8 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.MutableLiveData
 import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.User
-import com.dlctt.mvvmlearning.model.LoginDataSource
+import com.dlctt.mvvmlearning.model.login.LoginDataSource
+import com.dlctt.mvvmlearning.utils.Event
 import com.dlctt.mvvmlearning.utils.ServiceLocator
 import com.dlctt.mvvmlearning.utils.parseException
 import io.reactivex.SingleObserver
@@ -23,22 +24,22 @@ class LoginViewModel : ViewModel() {
         MutableLiveData<Resource<List<User>>>()
     }
 
-    private val inputErrorLiveData: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+    private val inputErrorLiveData: MutableLiveData<Event<String>> by lazy { MutableLiveData<Event<String>>() }
 
     fun login(userId: String) {
         if (userId.isEmpty()) {
-            inputErrorLiveData.value = "please enter a user id"
+            inputErrorLiveData.value = Event("please enter a user id")
             return
         }
         if (userId.toIntOrNull() == null) {
-            inputErrorLiveData.value = "Invalid user id format"
+            inputErrorLiveData.value = Event("Invalid user id format")
             return
         }
 
         loginRepo.loginById(userId.toInt()).subscribe(object : SingleObserver<List<User>> {
             override fun onSuccess(usersList: List<User>) {
                 if (usersList.isEmpty())
-                    loginResourceLiveData.value = Resource.Error("Wrong user id")
+                    loginResourceLiveData.value = Resource.Error(Event("Wrong user id"))
                 else
                     loginResourceLiveData.value = Resource.Success(usersList)
             }
@@ -49,12 +50,12 @@ class LoginViewModel : ViewModel() {
             }
 
             override fun onError(e: Throwable) {
-                loginResourceLiveData.value = Resource.Error(parseException(e))
+                loginResourceLiveData.value = Resource.Error(Event(parseException(e)))
             }
         })
     }
 
-    fun getInputErrorLiveData(): LiveData<String> = inputErrorLiveData
+    fun getInputErrorLiveData(): LiveData<Event<String>> = inputErrorLiveData
 
     fun getLoginResourceLiveData(): LiveData<Resource<List<User>>> = loginResourceLiveData
 }

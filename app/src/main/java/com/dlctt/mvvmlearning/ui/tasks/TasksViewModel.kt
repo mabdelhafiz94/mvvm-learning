@@ -5,7 +5,8 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.Task
-import com.dlctt.mvvmlearning.model.TasksDataSource
+import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
+import com.dlctt.mvvmlearning.utils.Event
 import com.dlctt.mvvmlearning.utils.ServiceLocator
 import com.dlctt.mvvmlearning.utils.parseException
 import io.reactivex.Single
@@ -45,7 +46,7 @@ class TasksViewModel : ViewModel() {
             }
 
             override fun onError(e: Throwable) {
-                resourceLiveData.value = Resource.Error(parseException(e))
+                resourceLiveData.value = Resource.Error(Event(parseException(e)))
             }
         })
     }

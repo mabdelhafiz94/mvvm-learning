@@ -45,7 +45,9 @@ class LoginFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.getInputErrorLiveData()
-            .observe(viewLifecycleOwner, Observer { msg -> showDialog(msg) })
+            .observe(viewLifecycleOwner, Observer { event ->
+                showDialog(event?.getData())
+            })
 
         viewModel.getLoginResourceLiveData().observe(viewLifecycleOwner, Observer { resource ->
 

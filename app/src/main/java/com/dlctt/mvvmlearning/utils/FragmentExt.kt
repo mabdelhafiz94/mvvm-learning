@@ -93,8 +93,8 @@ fun <T> Fragment.handleUIState(
 
     if (resource is Error) {
         if (useToastForMsgs)
-            showToast(resource.message)
+            showToast(resource.message?.getData())
         else
-            showDialog(resource.message)
+            showDialog(resource.message?.getData())
     }
 }

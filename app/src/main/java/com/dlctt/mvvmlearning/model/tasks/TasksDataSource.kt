@@ -1,4 +1,4 @@
-package com.dlctt.mvvmlearning.model
+package com.dlctt.mvvmlearning.model.tasks
 
 import com.dlctt.mvvmlearning.model.DTO.Task
 import io.reactivex.Single

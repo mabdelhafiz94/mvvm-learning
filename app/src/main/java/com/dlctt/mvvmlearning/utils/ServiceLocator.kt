@@ -1,9 +1,9 @@
 package com.dlctt.mvvmlearning.utils
 
-import com.dlctt.mvvmlearning.model.TasksDataSource
-import com.dlctt.mvvmlearning.model.TasksRepo
-import com.dlctt.mvvmlearning.model.LoginDataSource
-import com.dlctt.mvvmlearning.model.LoginRepo
+import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
+import com.dlctt.mvvmlearning.model.tasks.TasksRepo
+import com.dlctt.mvvmlearning.model.login.LoginDataSource
+import com.dlctt.mvvmlearning.model.login.LoginRepo
 import com.dlctt.mvvmlearning.model.remote.TasksRemoteDataSource
 import com.dlctt.mvvmlearning.model.remote.retrofit.LoginApi
 import com.dlctt.mvvmlearning.model.remote.retrofit.ServiceBuilder
