@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.Task
+import com.dlctt.mvvmlearning.utils.Constants
 import com.dlctt.mvvmlearning.utils.ListItemCallback
 import com.dlctt.mvvmlearning.utils.handleUIState
 import com.dlctt.mvvmlearning.utils.showToast
@@ -27,6 +28,12 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     private val viewModel: TasksViewModel by lazy {
         ViewModelProviders.of(this).get(TasksViewModel::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val userId = arguments?.getInt(Constants.USER_ID) ?: 0
+        viewModel.loadTasks(userId)
     }
 
     override fun onCreateView(

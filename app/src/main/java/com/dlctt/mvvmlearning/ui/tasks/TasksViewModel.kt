@@ -8,6 +8,7 @@ import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.TasksDataSource
 import com.dlctt.mvvmlearning.utils.ServiceLocator
 import com.dlctt.mvvmlearning.utils.parseException
+import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -26,12 +27,14 @@ class TasksViewModel : ViewModel() {
         MutableLiveData<Resource<List<Task>>>().also { it.value = Resource.Loading() }
     }
 
-    init {
-        loadTasks()
-    }
+    fun loadTasks(userId: Int) {
 
-    private fun loadTasks() {
-        tasksRepo.getTasks().subscribe(object : SingleObserver<List<Task>> {
+        val singleObserver: Single<List<Task>> = if (userId == 0)
+            tasksRepo.getTasks()
+        else
+            tasksRepo.getTasksByUserId(userId)
+
+        singleObserver.subscribe(object : SingleObserver<List<Task>> {
             override fun onSuccess(t: List<Task>) {
                 resourceLiveData.value = Resource.Success(t)
             }

@@ -8,7 +8,7 @@ import com.dlctt.mvvmlearning.model.remote.TasksRemoteDataSource
 import com.dlctt.mvvmlearning.model.remote.retrofit.LoginApi
 import com.dlctt.mvvmlearning.model.remote.retrofit.ServiceBuilder
 import com.dlctt.mvvmlearning.model.remote.retrofit.TasksApi
-import com.dlctt.mvvmlearning.model.remote.retrofit.LoginRemoteDataSource
+import com.dlctt.mvvmlearning.model.remote.LoginRemoteDataSource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 

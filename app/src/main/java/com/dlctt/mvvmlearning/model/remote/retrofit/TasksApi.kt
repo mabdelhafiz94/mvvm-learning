@@ -9,4 +9,7 @@ interface TasksApi {
     @GET("todos")
     fun getAllTasks(): Single<List<Task>>
 
+    @GET("todos")
+    fun getTasksByUserId(@Query("userId") userId: Int): Single<List<Task>>
+
 }

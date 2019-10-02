@@ -1,7 +1,8 @@
-package com.dlctt.mvvmlearning.model.remote.retrofit
+package com.dlctt.mvvmlearning.model.remote
 
 import com.dlctt.mvvmlearning.model.DTO.User
 import com.dlctt.mvvmlearning.model.LoginDataSource
+import com.dlctt.mvvmlearning.model.remote.retrofit.LoginApi
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
