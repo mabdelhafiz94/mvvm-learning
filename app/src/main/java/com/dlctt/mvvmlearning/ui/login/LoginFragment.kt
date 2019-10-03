@@ -34,35 +34,36 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupViews()
-        setupObservers()
     }
 
     private fun setupViews() {
         login_btn.setOnClickListener {
-            viewModel.login(user_id_field.text.toString())
+            viewModel.validateInput(user_id_field.text.toString())
+                .observe(viewLifecycleOwner, Observer { event ->
+                    if (event != null)
+                        showDialog(event.getData())
+                    else
+                        observeLogin()
+                })
         }
     }
 
-    private fun setupObservers() {
-        viewModel.getInputErrorLiveData()
-            .observe(viewLifecycleOwner, Observer { event ->
-                showDialog(event?.getData())
+    private fun observeLogin() {
+        viewModel.login(user_id_field.text.toString())
+            .observe(viewLifecycleOwner, Observer { resource ->
+
+                handleUIState(resource, loading_indicator, false)
+
+                if (resource is Resource.Success) {
+                    showDialog(
+                        "Login success with user email: ${resource.data!![0].email}",
+                        DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                            navigateToTasksScreen(
+                                resource.data[0].id
+                            )
+                        })
+                }
             })
-
-        viewModel.getLoginResourceLiveData().observe(viewLifecycleOwner, Observer { resource ->
-
-            handleUIState(resource, loading_indicator, false)
-
-            if (resource is Resource.Success) {
-                showDialog(
-                    "Login success with user email: ${resource.data!![0].email}",
-                    DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
-                        navigateToTasksScreen(
-                            resource.data[0].id
-                        )
-                    })
-            }
-        })
     }
 
     private fun navigateToTasksScreen(userId: Int) {

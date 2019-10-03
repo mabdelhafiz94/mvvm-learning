@@ -1,8 +1,8 @@
 package com.dlctt.mvvmlearning.ui.login
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.User
 import com.dlctt.mvvmlearning.model.login.LoginDataSource
@@ -26,16 +26,20 @@ class LoginViewModel : ViewModel() {
 
     private val inputErrorLiveData: MutableLiveData<Event<String>> by lazy { MutableLiveData<Event<String>>() }
 
-    fun login(userId: String) {
+    fun validateInput(userId: String): LiveData<Event<String>> {
         if (userId.isEmpty()) {
             inputErrorLiveData.value = Event("please enter a user id")
-            return
+            return inputErrorLiveData
         }
         if (userId.toIntOrNull() == null) {
             inputErrorLiveData.value = Event("Invalid user id format")
-            return
+            return inputErrorLiveData
         }
+        inputErrorLiveData.value = null
+        return inputErrorLiveData
+    }
 
+    fun login(userId: String): LiveData<Resource<List<User>>> {
         loginRepo.loginById(userId.toInt()).subscribe(object : SingleObserver<List<User>> {
             override fun onSuccess(usersList: List<User>) {
                 if (usersList.isEmpty())
@@ -53,9 +57,7 @@ class LoginViewModel : ViewModel() {
                 loginResourceLiveData.value = Resource.Error(Event(parseException(e)))
             }
         })
+
+        return loginResourceLiveData
     }
-
-    fun getInputErrorLiveData(): LiveData<Event<String>> = inputErrorLiveData
-
-    fun getLoginResourceLiveData(): LiveData<Resource<List<User>>> = loginResourceLiveData
 }
