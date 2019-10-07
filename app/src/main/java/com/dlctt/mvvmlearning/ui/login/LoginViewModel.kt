@@ -20,8 +20,8 @@ class LoginViewModel : ViewModel() {
         ServiceLocator.getInstance().loginRepo
     }
 
-    private val loginResourceLiveData: MutableLiveData<Resource<List<User>>> by lazy {
-        MutableLiveData<Resource<List<User>>>()
+    private val loginResourceLiveData: MutableLiveData<Event<Resource<List<User>>>> by lazy {
+        MutableLiveData<Event<Resource<List<User>>>>()
     }
 
     private val inputErrorLiveData: MutableLiveData<Event<String>> by lazy { MutableLiveData<Event<String>>() }
@@ -40,22 +40,22 @@ class LoginViewModel : ViewModel() {
         inputErrorLiveData.value = Event("ok")
     }
 
-    fun login(userId: String): LiveData<Resource<List<User>>> {
+    fun login(userId: String): LiveData<Event<Resource<List<User>>>> {
         loginRepo.loginById(userId.toInt()).subscribe(object : SingleObserver<List<User>> {
             override fun onSuccess(usersList: List<User>) {
                 if (usersList.isEmpty())
-                    loginResourceLiveData.value = Resource.Error(Event("Wrong user id"))
+                    loginResourceLiveData.value = Event(Resource.Error(Event("Wrong user id")))
                 else
-                    loginResourceLiveData.value = Resource.Success(usersList)
+                    loginResourceLiveData.value = Event(Resource.Success(usersList))
             }
 
             override fun onSubscribe(d: Disposable) {
                 compositeDisposable.add(d)
-                loginResourceLiveData.value = Resource.Loading()
+                loginResourceLiveData.value = Event(Resource.Loading())
             }
 
             override fun onError(e: Throwable) {
-                loginResourceLiveData.value = Resource.Error(Event(parseException(e)))
+                loginResourceLiveData.value = Event(Resource.Error(Event(parseException(e))))
             }
         })
 

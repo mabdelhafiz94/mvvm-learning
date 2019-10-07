@@ -54,18 +54,19 @@ class LoginFragment : Fragment() {
 
     private fun observeLogin() {
         viewModel.login(user_id_field.text.toString())
-            .observe(viewLifecycleOwner, Observer { resource ->
+            .observe(viewLifecycleOwner, Observer { event ->
+                event?.getContent()?.let { resource ->
+                    handleUIState(resource, loading_indicator, false)
 
-                handleUIState(resource, loading_indicator, false)
-
-                if (resource is Resource.Success) {
-                    showDialog(
-                        "Login success with user email: ${resource.data!![0].email}",
-                        DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
-                            navigateToTasksScreen(
-                                resource.data[0].id
-                            )
-                        })
+                    if (resource is Resource.Success) {
+                        showDialog(
+                            "Login success with user email: ${resource.data!![0].email}",
+                            DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                                navigateToTasksScreen(
+                                    resource.data[0].id
+                                )
+                            })
+                    }
                 }
             })
     }
