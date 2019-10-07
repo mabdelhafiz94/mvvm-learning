@@ -1,12 +1,12 @@
 package com.dlctt.mvvmlearning.utils
 
-class Event<T>(private var data: T? = null) {
+class Event<T>(private var content: T? = null) {
     private var consumed: Boolean = false
 
-    fun getData(): T? {
+    fun getContent(): T? {
         return if (!consumed) {
             consumed = true
-            data
+            content
         } else
             null
     }

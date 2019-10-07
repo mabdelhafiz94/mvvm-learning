@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
             viewModel.validateInput(user_id_field.text.toString())
                 .observe(viewLifecycleOwner, Observer { event ->
                     if (event != null)
-                        showDialog(event.getData())
+                        showDialog(event.getContent())
                     else
                         observeLogin()
                 })
