@@ -17,7 +17,7 @@ import io.reactivex.disposables.Disposable
 /**
  * Created by abdelhafiz on 9/25/19.
  */
-class TasksViewModel : ViewModel() {
+class TasksViewModel(private val userId: Int) : ViewModel() {
     private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
 
     private val tasksRepo: TasksDataSource by lazy {
@@ -28,7 +28,11 @@ class TasksViewModel : ViewModel() {
         MutableLiveData<Resource<List<Task>>>().also { it.value = Resource.Loading() }
     }
 
-    fun loadTasks(userId: Int) {
+    init {
+        loadTasks()
+    }
+
+    private fun loadTasks() {
 
         val singleObserver: Single<List<Task>> = if (userId == 0)
             tasksRepo.getTasks()
