@@ -10,4 +10,6 @@ class Event<T>(private var content: T? = null) {
         } else
             null
     }
+
+    fun peekContent(): T? = content
 }
