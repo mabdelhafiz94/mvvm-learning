@@ -4,12 +4,15 @@ class Event<T>(private var content: T? = null) {
     private var consumed: Boolean = false
 
     fun getContent(): T? {
-        return if (!consumed) {
+        if (consumed)
+            content = null
+        else
             consumed = true
-            content
-        } else
-            null
+
+        return content
     }
 
-    fun peekContent(): T? = content
+    fun peekContent(): T? {
+        return if (consumed) null else content
+    }
 }

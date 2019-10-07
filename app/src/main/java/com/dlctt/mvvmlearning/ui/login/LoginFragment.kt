@@ -18,6 +18,7 @@ import com.dlctt.mvvmlearning.utils.showDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
+//    private val _tag = this.javaClass.simpleName
 
     private val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(this).get(LoginViewModel::class.java)
@@ -28,6 +29,15 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel.getInputErrorLiveData().observe(viewLifecycleOwner, Observer { event ->
+            if (event != null) {
+                val content = event.getContent()
+                if (content == "ok")
+                    observeLogin()
+                else
+                    showDialog(content)
+            }
+        })
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
@@ -39,12 +49,6 @@ class LoginFragment : Fragment() {
     private fun setupViews() {
         login_btn.setOnClickListener {
             viewModel.validateInput(user_id_field.text.toString())
-                .observe(viewLifecycleOwner, Observer { event ->
-                    if (event != null)
-                        showDialog(event.getContent())
-                    else
-                        observeLogin()
-                })
         }
     }
 

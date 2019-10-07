@@ -26,17 +26,18 @@ class LoginViewModel : ViewModel() {
 
     private val inputErrorLiveData: MutableLiveData<Event<String>> by lazy { MutableLiveData<Event<String>>() }
 
-    fun validateInput(userId: String): LiveData<Event<String>> {
+    fun getInputErrorLiveData(): LiveData<Event<String>> = inputErrorLiveData
+
+    fun validateInput(userId: String) {
         if (userId.isEmpty()) {
             inputErrorLiveData.value = Event("please enter a user id")
-            return inputErrorLiveData
+            return
         }
         if (userId.toIntOrNull() == null) {
             inputErrorLiveData.value = Event("Invalid user id format")
-            return inputErrorLiveData
+            return
         }
-        inputErrorLiveData.value = null
-        return inputErrorLiveData
+        inputErrorLiveData.value = Event("ok")
     }
 
     fun login(userId: String): LiveData<Resource<List<User>>> {
