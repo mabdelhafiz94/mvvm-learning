@@ -1,7 +1,7 @@
 package com.dlctt.mvvmlearning.ui.tasks
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.utils.Constants
 import com.dlctt.mvvmlearning.utils.navigateToFragment

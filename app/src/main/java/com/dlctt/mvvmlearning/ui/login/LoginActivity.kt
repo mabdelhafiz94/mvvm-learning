@@ -1,6 +1,6 @@
 package com.dlctt.mvvmlearning.ui.login
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.utils.navigateToFragment

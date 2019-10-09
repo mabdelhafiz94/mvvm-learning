@@ -1,8 +1,8 @@
 package com.dlctt.mvvmlearning.ui.tasks
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.tasks.TasksDataSource

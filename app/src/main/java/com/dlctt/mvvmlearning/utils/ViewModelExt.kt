@@ -1,6 +1,6 @@
 package com.dlctt.mvvmlearning.utils
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import android.util.Log
 import okhttp3.ResponseBody
 import retrofit2.HttpException
