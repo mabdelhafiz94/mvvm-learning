@@ -37,7 +37,7 @@ class LoginViewModel : ViewModel() {
             inputErrorLiveData.value = Event("Invalid user id format")
             return
         }
-        inputErrorLiveData.value = Event("ok")
+        inputErrorLiveData.value = Event(null)
     }
 
     fun login(userId: String): LiveData<Event<Resource<List<User>>>> {

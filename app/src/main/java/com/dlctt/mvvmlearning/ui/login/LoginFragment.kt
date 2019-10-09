@@ -30,12 +30,13 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel.getInputErrorLiveData().observe(viewLifecycleOwner, Observer { event ->
-            if (event != null) {
-                val content = event.getContent()
-                if (content == "ok")
-                    observeLogin()
-                else
-                    showDialog(content)
+            event?.let {
+                with(event.getContent())
+                {
+                    user_id_field.error = this
+                    if (this == null)
+                        observeLogin()
+                }
             }
         })
         return inflater.inflate(R.layout.fragment_login, container, false)
