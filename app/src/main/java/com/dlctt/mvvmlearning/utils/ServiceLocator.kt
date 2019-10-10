@@ -78,3 +78,5 @@ class ServiceLocator private constructor() {
     }
 
 }
+
+class UnImplementedException(message: String) : Exception(message)
