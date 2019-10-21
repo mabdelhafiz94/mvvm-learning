@@ -10,7 +10,9 @@ import java.net.SocketTimeoutException
 /**
  * Created by abdelhafiz on 9/28/19.
  */
-fun ViewModel.parseException(error: Throwable): String {
+fun ViewModel.parseException(error: Throwable?): String {
+    if (error == null) return "Generic Error"
+
     val TAG = this.javaClass.simpleName
     when (error) {
         is HttpException -> return if (error.code() == 401 || error.code() == 404) {
@@ -27,7 +29,7 @@ fun ViewModel.parseException(error: Throwable): String {
         is IOException -> return "Error in internet connection"
         else -> {
             Log.e(TAG, error.message)
-            return "Generic error"
+            return error.message ?: "Generic error"
         }
     }
 }

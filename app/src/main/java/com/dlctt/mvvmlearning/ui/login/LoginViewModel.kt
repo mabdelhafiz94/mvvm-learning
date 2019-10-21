@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.User
+import com.dlctt.mvvmlearning.model.local.UserSession
 import com.dlctt.mvvmlearning.model.login.LoginDataSource
 import com.dlctt.mvvmlearning.utils.Event
 import com.dlctt.mvvmlearning.utils.ServiceLocator
@@ -20,45 +21,69 @@ class LoginViewModel : ViewModel() {
         ServiceLocator.getInstance().loginRepo
     }
 
-    private val loginResultLiveData: MutableLiveData<Event<Result<List<User>>>> by lazy {
-        MutableLiveData<Event<Result<List<User>>>>()
-    }
+    private val loading = MutableLiveData<Boolean>()
+    private val dialogMessage = MutableLiveData<Event<String>>()
+    private val inputError = MutableLiveData<Event<String>>()
+    private val navigateToMain = MutableLiveData<Event<Boolean>>()
 
-    private val inputErrorLiveData: MutableLiveData<Event<String>> by lazy { MutableLiveData<Event<String>>() }
+    fun isLoading(): LiveData<Boolean> = loading
 
-    fun getInputErrorLiveData(): LiveData<Event<String>> = inputErrorLiveData
+    fun getInputError(): LiveData<Event<String>> = inputError
+
+    fun getDialogMessage(): LiveData<Event<String>> = dialogMessage
+
+    fun navigateToMain(): LiveData<Event<Boolean>> = navigateToMain
 
     fun validateInput(userId: String) {
         if (userId.isEmpty()) {
-            inputErrorLiveData.value = Event("please enter a user id")
+            inputError.value = Event("please enter a user id")
             return
         }
         if (userId.toIntOrNull() == null) {
-            inputErrorLiveData.value = Event("Invalid user id format")
+            inputError.value = Event("Invalid user id format")
             return
         }
-        inputErrorLiveData.value = Event(null)
+        inputError.value = Event("ok")
+//        if (inputError.value?.peekContent()?.equals("ok") == true)
+        login(userId)
     }
 
-    fun login(userId: String): LiveData<Event<Result<List<User>>>> {
+    fun login(userId: String) {
         loginRepo.loginById(userId.toInt()).subscribe(object : SingleObserver<List<User>> {
             override fun onSuccess(usersList: List<User>) {
-                if (usersList.isEmpty())
-                    loginResultLiveData.value = Event(Result.Error(Event("Wrong user id")))
+                val result: Result<List<User>> = if (usersList.isEmpty())
+                    Result.Error(Exception("Wrong user id"))
                 else
-                    loginResultLiveData.value = Event(Result.Success(usersList))
+                    Result.Success(usersList)
+
+                handleResult(result)
             }
 
             override fun onSubscribe(d: Disposable) {
                 compositeDisposable.add(d)
-                loginResultLiveData.value = Event(Result.Loading())
+                handleResult(Result.Loading())
             }
 
             override fun onError(e: Throwable) {
-                loginResultLiveData.value = Event(Result.Error(Event(parseException(e))))
+                handleResult(Result.Error(e))
             }
         })
+    }
 
-        return loginResultLiveData
+    private fun handleResult(result: Result<List<User>>) {
+        loading.value = result is Result.Loading
+
+        if (result is Result.Error)
+            dialogMessage.value = Event(parseException(result.exception))
+
+        if (result is Result.Success && result.data != null) {
+            if (result.data.isEmpty()) {
+                dialogMessage.value = Event("Wrong user id")
+            } else {
+                UserSession.userId = result.data[0].id
+                dialogMessage.value = Event("Logged in successfully as ${result.data[0].name}")
+                navigateToMain.value = Event(true)
+            }
+        }
     }
 }

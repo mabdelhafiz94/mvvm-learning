@@ -62,7 +62,7 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
     private fun observeLiveData() {
         viewModel.getResourceLiveData().observe(viewLifecycleOwner, Observer { resource ->
             handleUIState(resource, loading_indicator, true)
-            if (resource is com.dlctt.mvvmlearning.model.DTO.Resource.Result.Success) {
+            if (resource is com.dlctt.mvvmlearning.model.DTO.Result.Success) {
                 tasksAdapter.submitList(resource.data)
             }
         })

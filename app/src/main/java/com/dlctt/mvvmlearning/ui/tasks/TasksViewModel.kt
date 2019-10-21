@@ -50,7 +50,7 @@ class TasksViewModel(private val userId: Int) : ViewModel() {
             }
 
             override fun onError(e: Throwable) {
-                resultLiveData.value = Result.Error(Event(parseException(e)))
+                resultLiveData.value = Result.Error(e)
             }
         })
     }
