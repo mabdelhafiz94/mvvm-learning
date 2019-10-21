@@ -3,7 +3,7 @@ package com.dlctt.mvvmlearning.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dlctt.mvvmlearning.model.DTO.Resource
+import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.User
 import com.dlctt.mvvmlearning.model.login.LoginDataSource
 import com.dlctt.mvvmlearning.utils.Event
@@ -20,8 +20,8 @@ class LoginViewModel : ViewModel() {
         ServiceLocator.getInstance().loginRepo
     }
 
-    private val loginResourceLiveData: MutableLiveData<Event<Resource<List<User>>>> by lazy {
-        MutableLiveData<Event<Resource<List<User>>>>()
+    private val loginResultLiveData: MutableLiveData<Event<Result<List<User>>>> by lazy {
+        MutableLiveData<Event<Result<List<User>>>>()
     }
 
     private val inputErrorLiveData: MutableLiveData<Event<String>> by lazy { MutableLiveData<Event<String>>() }
@@ -40,25 +40,25 @@ class LoginViewModel : ViewModel() {
         inputErrorLiveData.value = Event(null)
     }
 
-    fun login(userId: String): LiveData<Event<Resource<List<User>>>> {
+    fun login(userId: String): LiveData<Event<Result<List<User>>>> {
         loginRepo.loginById(userId.toInt()).subscribe(object : SingleObserver<List<User>> {
             override fun onSuccess(usersList: List<User>) {
                 if (usersList.isEmpty())
-                    loginResourceLiveData.value = Event(Resource.Error(Event("Wrong user id")))
+                    loginResultLiveData.value = Event(Result.Error(Event("Wrong user id")))
                 else
-                    loginResourceLiveData.value = Event(Resource.Success(usersList))
+                    loginResultLiveData.value = Event(Result.Success(usersList))
             }
 
             override fun onSubscribe(d: Disposable) {
                 compositeDisposable.add(d)
-                loginResourceLiveData.value = Event(Resource.Loading())
+                loginResultLiveData.value = Event(Result.Loading())
             }
 
             override fun onError(e: Throwable) {
-                loginResourceLiveData.value = Event(Resource.Error(Event(parseException(e))))
+                loginResultLiveData.value = Event(Result.Error(Event(parseException(e))))
             }
         })
 
-        return loginResourceLiveData
+        return loginResultLiveData
     }
 }

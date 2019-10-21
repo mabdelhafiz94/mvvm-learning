@@ -7,9 +7,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.dlctt.mvvmlearning.R
-import com.dlctt.mvvmlearning.model.DTO.Resource
-import com.dlctt.mvvmlearning.model.DTO.Resource.Error
-import com.dlctt.mvvmlearning.model.DTO.Resource.Loading
+import com.dlctt.mvvmlearning.model.DTO.Result
+import com.dlctt.mvvmlearning.model.DTO.Result.Error
+import com.dlctt.mvvmlearning.model.DTO.Result.Loading
 
 fun Fragment.showDialog(message: String?) {
     if (message == null) return
@@ -82,19 +82,19 @@ fun Fragment.statusBarColorToSolidWhite() {
 }
 
 fun <T> Fragment.handleUIState(
-    resource: Resource<T>?,
+    result: Result<T>?,
     loadingIndicator: View,
     useToastForMsgs: Boolean
 ) {
-    if (resource is Loading)
+    if (result is Loading)
         loadingIndicator.show()
     else
         loadingIndicator.hide()
 
-    if (resource is Error) {
+    if (result is Error) {
         if (useToastForMsgs)
-            showToast(resource.message?.getContent())
+            showToast(result.message?.getContent())
         else
-            showDialog(resource.message?.getContent())
+            showDialog(result.message?.getContent())
     }
 }

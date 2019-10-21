@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dlctt.mvvmlearning.R
-import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.utils.Constants
 import com.dlctt.mvvmlearning.utils.ListItemCallback
@@ -63,7 +62,7 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
     private fun observeLiveData() {
         viewModel.getResourceLiveData().observe(viewLifecycleOwner, Observer { resource ->
             handleUIState(resource, loading_indicator, true)
-            if (resource is Resource.Success) {
+            if (resource is com.dlctt.mvvmlearning.model.DTO.Resource.Result.Success) {
                 tasksAdapter.submitList(resource.data)
             }
         })

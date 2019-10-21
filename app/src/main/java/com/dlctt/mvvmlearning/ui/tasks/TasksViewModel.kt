@@ -3,7 +3,7 @@ package com.dlctt.mvvmlearning.ui.tasks
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dlctt.mvvmlearning.model.DTO.Resource
+import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
 import com.dlctt.mvvmlearning.utils.Event
@@ -24,8 +24,8 @@ class TasksViewModel(private val userId: Int) : ViewModel() {
         ServiceLocator.getInstance().tasksRepo
     }
 
-    private val resourceLiveData: MutableLiveData<Resource<List<Task>>> by lazy {
-        MutableLiveData<Resource<List<Task>>>().also { it.value = Resource.Loading() }
+    private val resultLiveData: MutableLiveData<Result<List<Task>>> by lazy {
+        MutableLiveData<Result<List<Task>>>().also { it.value = Result.Loading() }
     }
 
     init {
@@ -41,21 +41,21 @@ class TasksViewModel(private val userId: Int) : ViewModel() {
 
         singleObserver.subscribe(object : SingleObserver<List<Task>> {
             override fun onSuccess(t: List<Task>) {
-                resourceLiveData.value = Resource.Success(t)
+                resultLiveData.value = Result.Success(t)
             }
 
             override fun onSubscribe(d: Disposable) {
                 compositeDisposable.add(d)
-                resourceLiveData.value = Resource.Loading()
+                resultLiveData.value = Result.Loading()
             }
 
             override fun onError(e: Throwable) {
-                resourceLiveData.value = Resource.Error(Event(parseException(e)))
+                resultLiveData.value = Result.Error(Event(parseException(e)))
             }
         })
     }
 
-    fun getResourceLiveData(): LiveData<Resource<List<Task>>> = resourceLiveData
+    fun getResourceLiveData(): LiveData<Result<List<Task>>> = resultLiveData
 
     override fun onCleared() {
         compositeDisposable.clear()

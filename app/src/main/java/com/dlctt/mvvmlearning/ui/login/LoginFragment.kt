@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dlctt.mvvmlearning.R
-import com.dlctt.mvvmlearning.model.DTO.Resource
 import com.dlctt.mvvmlearning.ui.tasks.TasksActivity
 import com.dlctt.mvvmlearning.utils.Constants
 import com.dlctt.mvvmlearning.utils.handleUIState
@@ -59,7 +58,7 @@ class LoginFragment : Fragment() {
                 event?.getContent()?.let { resource ->
                     handleUIState(resource, loading_indicator, false)
 
-                    if (resource is Resource.Success) {
+                    if (resource is com.dlctt.mvvmlearning.model.DTO.Result.Success) {
                         showDialog(
                             "Login success with user email: ${resource.data!![0].email}",
                             DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
