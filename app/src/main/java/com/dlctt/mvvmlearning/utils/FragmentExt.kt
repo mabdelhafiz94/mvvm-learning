@@ -101,16 +101,6 @@ fun <T> Fragment.handleUIState(
     }
 }
 
-fun Fragment.observeLoading(loadingIndicator: View, isLoading: LiveData<Boolean>) {
-    isLoading.observe(viewLifecycleOwner, Observer {
-        it?.let { loading ->
-            loadingIndicator.visibility = if (loading) View.VISIBLE
-            else
-                View.GONE
-        }
-    })
-}
-
 fun Fragment.observeMessages(useToast: Boolean, messageLiveData: LiveData<Event<String>>) {
     messageLiveData.observe(viewLifecycleOwner, Observer { event ->
         event?.let {

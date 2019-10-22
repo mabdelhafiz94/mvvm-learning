@@ -5,26 +5,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.dlctt.mvvmlearning.R
+import com.dlctt.mvvmlearning.databinding.FragmentLoginBinding
 import com.dlctt.mvvmlearning.ui.tasks.TasksActivity
-import com.dlctt.mvvmlearning.utils.observeLoading
 import com.dlctt.mvvmlearning.utils.observeMessages
-import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(this).get(LoginViewModel::class.java)
     }
 
+    private lateinit var viewBinding: FragmentLoginBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        viewBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+        viewBinding.lifecycleOwner = viewLifecycleOwner
+        viewBinding.viewModel = viewModel
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -34,7 +40,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        observeLoading(loading_indicator, viewModel.isLoading())
         observeMessages(true, viewModel.getToastMessage())
         observeMessages(false, viewModel.getDialogMessage())
         observeInputErrors()
@@ -45,9 +50,9 @@ class LoginFragment : Fragment() {
         viewModel.getInputError().observe(viewLifecycleOwner, Observer {
             it?.getContent()?.let { errMsg ->
                 if (errMsg == "ok")
-                    user_id_field.error = null
+                    viewBinding.userIdField.error = null
                 else
-                    user_id_field.error = errMsg
+                    viewBinding.userIdField.error = errMsg
             }
         })
     }
@@ -62,8 +67,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupViews() {
-        login_btn.setOnClickListener {
-            viewModel.validateInput(user_id_field.text.toString())
+        viewBinding.loginBtn.setOnClickListener {
+            viewModel.validateInput(viewBinding.userIdField.text.toString())
         }
     }
 
