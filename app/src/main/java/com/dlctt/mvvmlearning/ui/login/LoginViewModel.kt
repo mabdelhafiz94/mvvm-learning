@@ -44,7 +44,6 @@ class LoginViewModel : ViewModel() {
             return
         }
         inputError.value = Event("ok")
-//        if (inputError.value?.peekContent()?.equals("ok") == true)
         login(userId)
     }
 
@@ -74,10 +73,10 @@ class LoginViewModel : ViewModel() {
         loading.value = result is Result.Loading
 
         if (result is Result.Error)
-            dialogMessage.value = Event(parseException(result.exception))
+            dialogMessage.value = Event(result.exception.parseException())
 
-        if (result is Result.Success && result.data != null) {
-            if (result.data.isEmpty()) {
+        if (result.isSucceeded()) {
+            if (result.data!!.isEmpty()) {
                 dialogMessage.value = Event("Wrong user id")
             } else {
                 UserSession.userId = result.data[0].id

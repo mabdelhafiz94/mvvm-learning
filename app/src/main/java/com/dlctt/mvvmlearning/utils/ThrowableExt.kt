@@ -1,6 +1,5 @@
 package com.dlctt.mvvmlearning.utils
 
-import androidx.lifecycle.ViewModel
 import android.util.Log
 import okhttp3.ResponseBody
 import retrofit2.HttpException
@@ -10,17 +9,16 @@ import java.net.SocketTimeoutException
 /**
  * Created by abdelhafiz on 9/28/19.
  */
-fun ViewModel.parseException(error: Throwable?): String {
-    if (error == null) return "Generic Error"
-
+fun Throwable?.parseException(): String {
+    if (this == null) return "Generic Error"
     val TAG = this.javaClass.simpleName
-    when (error) {
-        is HttpException -> return if (error.code() == 401 || error.code() == 404) {
+    when (this) {
+        is HttpException -> return if (this.code() == 401 || this.code() == 404) {
             "Wrong Credentials"
-        } else if (error.code() == 409) {
+        } else if (this.code() == 409) {
             "Server Conflict!"
         } else {
-            val responseBody = error.response().errorBody()
+            val responseBody = this.response().errorBody()
             val errorJson = getErrorMessage(responseBody)
             Log.i(TAG, errorJson)
             "Generic server error"
@@ -28,8 +26,8 @@ fun ViewModel.parseException(error: Throwable?): String {
         is SocketTimeoutException -> return "Connection timed out"
         is IOException -> return "Error in internet connection"
         else -> {
-            Log.e(TAG, error.message)
-            return error.message ?: "Generic error"
+            Log.e(TAG, this.message)
+            return this.message ?: "Generic error"
         }
     }
 }

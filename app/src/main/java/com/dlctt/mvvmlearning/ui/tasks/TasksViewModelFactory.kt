@@ -7,6 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 class TasksViewModelFactory(private val userId: Int) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TasksViewModel(userId) as T
+        return TasksViewModel() as T
     }
 }

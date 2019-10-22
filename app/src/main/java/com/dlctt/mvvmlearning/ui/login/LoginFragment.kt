@@ -10,13 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.ui.tasks.TasksActivity
-import com.dlctt.mvvmlearning.utils.handleLoading
-import com.dlctt.mvvmlearning.utils.handleMessages
+import com.dlctt.mvvmlearning.utils.observeLoading
+import com.dlctt.mvvmlearning.utils.observeMessages
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
-//    private val _tag = this.javaClass.simpleName
-
     private val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(this).get(LoginViewModel::class.java)
     }
@@ -36,8 +34,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        handleLoading(loading_indicator, viewModel.isLoading())
-        handleMessages(true, viewModel.getDialogMessage())
+        observeLoading(loading_indicator, viewModel.isLoading())
+        observeMessages(true, viewModel.getDialogMessage())
         observeInputErrors()
         observeNavigation()
     }

@@ -1,20 +1,20 @@
 package com.dlctt.mvvmlearning.ui.tasks
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.model.DTO.Task
-import com.dlctt.mvvmlearning.utils.Constants
 import com.dlctt.mvvmlearning.utils.ListItemCallback
-import com.dlctt.mvvmlearning.utils.handleUIState
+import com.dlctt.mvvmlearning.utils.observeLoading
+import com.dlctt.mvvmlearning.utils.observeMessages
 import com.dlctt.mvvmlearning.utils.showToast
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
@@ -22,15 +22,10 @@ import kotlinx.android.synthetic.main.fragment_tasks.*
  * Created by abdelhafiz on 9/25/19.
  */
 class TasksFragment : Fragment(), ListItemCallback<Task> {
-
     private val tasksAdapter: TasksAdapter by lazy { TasksAdapter(this) }
 
     private val viewModel: TasksViewModel by lazy {
-        ViewModelProviders.of(
-            this, TasksViewModelFactory(
-                arguments?.getInt(Constants.USER_ID) ?: 0
-            )
-        ).get(TasksViewModel::class.java)
+        ViewModelProviders.of(this).get(TasksViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -56,14 +51,19 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        observeLiveData()
+        observeViewModel()
     }
 
-    private fun observeLiveData() {
-        viewModel.getResourceLiveData().observe(viewLifecycleOwner, Observer { resource ->
-            handleUIState(resource, loading_indicator, true)
-            if (resource is com.dlctt.mvvmlearning.model.DTO.Result.Success) {
-                tasksAdapter.submitList(resource.data)
+    private fun observeViewModel() {
+        observeLoading(loading_indicator, viewModel.isLoading())
+        observeMessages(true, viewModel.getDialogMessage())
+        observeTasks()
+    }
+
+    private fun observeTasks() {
+        viewModel.getTasksLiveData().observe(viewLifecycleOwner, Observer {
+            it?.let { tasks ->
+                tasksAdapter.submitList(tasks)
             }
         })
     }
