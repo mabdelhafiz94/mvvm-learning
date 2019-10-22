@@ -56,7 +56,7 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
 
     private fun observeViewModel() {
         observeLoading(loading_indicator, viewModel.isLoading())
-        observeMessages(true, viewModel.getDialogMessage())
+        observeMessages(false, viewModel.getDialogMessage())
         observeTasks()
     }
 

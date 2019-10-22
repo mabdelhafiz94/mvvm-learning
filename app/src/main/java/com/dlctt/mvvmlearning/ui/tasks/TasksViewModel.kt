@@ -2,11 +2,11 @@ package com.dlctt.mvvmlearning.ui.tasks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.local.UserSession
 import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
+import com.dlctt.mvvmlearning.utils.BaseViewModel
 import com.dlctt.mvvmlearning.utils.Event
 import com.dlctt.mvvmlearning.utils.ServiceLocator
 import com.dlctt.mvvmlearning.utils.parseException
@@ -18,24 +18,18 @@ import io.reactivex.disposables.Disposable
 /**
  * Created by abdelhafiz on 9/25/19.
  */
-class TasksViewModel : ViewModel() {
+class TasksViewModel : BaseViewModel() {
     private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
     private val userSession: UserSession = UserSession
 
-    private val tasksRepo: TasksDataSource by lazy {
-        ServiceLocator.getInstance().tasksRepo
-    }
-
+    private val tasksRepo: TasksDataSource by lazy { ServiceLocator.getInstance().tasksRepo }
     private val tasksLiveData = MutableLiveData<List<Task>>()
-    private val loading = MutableLiveData<Boolean>()
-    private val dialogMessage = MutableLiveData<Event<String>>()
 
     init {
         loadTasks()
     }
 
     private fun loadTasks() {
-
         val singleObserver: Single<List<Task>> = if (userSession.userId == 0)
             tasksRepo.getTasks()
         else
@@ -69,8 +63,6 @@ class TasksViewModel : ViewModel() {
     }
 
     fun getTasksLiveData(): LiveData<List<Task>> = tasksLiveData
-    fun isLoading(): LiveData<Boolean> = loading
-    fun getDialogMessage(): LiveData<Event<String>> = dialogMessage
 
     override fun onCleared() {
         compositeDisposable.clear()

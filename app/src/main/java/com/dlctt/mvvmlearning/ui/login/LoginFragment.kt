@@ -35,7 +35,8 @@ class LoginFragment : Fragment() {
 
     private fun observeViewModel() {
         observeLoading(loading_indicator, viewModel.isLoading())
-        observeMessages(true, viewModel.getDialogMessage())
+        observeMessages(true, viewModel.getToastMessage())
+        observeMessages(false, viewModel.getDialogMessage())
         observeInputErrors()
         observeNavigation()
     }
