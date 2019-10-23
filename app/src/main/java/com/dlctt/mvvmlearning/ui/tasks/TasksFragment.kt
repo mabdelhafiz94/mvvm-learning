@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,9 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.databinding.FragmentTasksBinding
 import com.dlctt.mvvmlearning.model.DTO.Task
+import com.dlctt.mvvmlearning.ui.taskDetails.TaskDetailsFragment
 import com.dlctt.mvvmlearning.utils.ListItemCallback
+import com.dlctt.mvvmlearning.utils.navigateToFragment
 import com.dlctt.mvvmlearning.utils.observeMessages
-import com.dlctt.mvvmlearning.utils.showToast
 
 /**
  * Created by abdelhafiz on 9/25/19.
@@ -60,6 +62,7 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
     private fun observeViewModel() {
         observeMessages(false, viewModel.getDialogMessage())
         observeTasks()
+        observeNavigation()
     }
 
     private fun observeTasks() {
@@ -70,8 +73,25 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
         })
     }
 
+    private fun observeNavigation() {
+        viewModel.navigateToTaskDetails().observe(viewLifecycleOwner, Observer { event ->
+            event?.getContent()?.let { navigate ->
+                if (navigate)
+                    navigateToDetailsScreen()
+            }
+        })
+    }
+
+    private fun navigateToDetailsScreen() {
+        (activity as AppCompatActivity).navigateToFragment(
+            TaskDetailsFragment(),
+            false,
+            R.id.fragments_main_container
+        )
+    }
+
     override fun onItemClicked(item: Task) {
-        showToast(item.toString())
+        viewModel.onTaskSelected(item)
     }
 
 }

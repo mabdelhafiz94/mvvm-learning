@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.databinding.FragmentLoginBinding
-import com.dlctt.mvvmlearning.ui.tasks.TasksActivity
+import com.dlctt.mvvmlearning.ui.MainActivity
 import com.dlctt.mvvmlearning.utils.observeMessages
 
 class LoginFragment : Fragment() {
@@ -73,6 +73,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToTasksScreen() {
-        startActivity(Intent(context, TasksActivity::class.java))
+        startActivity(Intent(context, MainActivity::class.java))
     }
 }
