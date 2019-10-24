@@ -11,7 +11,6 @@ import com.dlctt.mvvmlearning.utils.BaseViewModel
 import com.dlctt.mvvmlearning.utils.Event
 import com.dlctt.mvvmlearning.utils.ServiceLocator
 import com.dlctt.mvvmlearning.utils.parseException
-import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -32,25 +31,21 @@ class TasksViewModel : BaseViewModel() {
     }
 
     private fun loadTasks() {
-        val singleObserver: Single<List<Task>> = if (userSession.userId == 0)
-            tasksRepo.getTasks()
-        else
-            tasksRepo.getTasksByUserId(userSession.userId)
+        tasksRepo.getTasksByUserId(userSession.userId)
+            .subscribe(object : SingleObserver<List<Task>> {
+                override fun onSuccess(t: List<Task>) {
+                    handleResult(Result.Success(t))
+                }
 
-        singleObserver.subscribe(object : SingleObserver<List<Task>> {
-            override fun onSuccess(t: List<Task>) {
-                handleResult(Result.Success(t))
-            }
+                override fun onSubscribe(d: Disposable) {
+                    compositeDisposable.add(d)
+                    handleResult(Result.Loading())
+                }
 
-            override fun onSubscribe(d: Disposable) {
-                compositeDisposable.add(d)
-                handleResult(Result.Loading())
-            }
-
-            override fun onError(e: Throwable) {
-                handleResult(Result.Error(e))
-            }
-        })
+                override fun onError(e: Throwable) {
+                    handleResult(Result.Error(e))
+                }
+            })
     }
 
     private fun handleResult(result: Result<List<Task>>) {
