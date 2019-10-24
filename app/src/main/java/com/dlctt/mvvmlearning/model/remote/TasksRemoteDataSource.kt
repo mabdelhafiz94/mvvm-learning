@@ -6,6 +6,8 @@ import com.dlctt.mvvmlearning.model.remote.retrofit.TasksApi
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class TasksRemoteDataSource(private val tasksApi: TasksApi) :
     TasksDataSource {
@@ -15,10 +17,10 @@ class TasksRemoteDataSource(private val tasksApi: TasksApi) :
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getTasksByUserId(userId: Int): Single<List<Task>> {
-        return tasksApi.getTasksByUserId(userId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+    override suspend fun getTasksByUserId(userId: Int): List<Task> {
+        return withContext(Dispatchers.IO)
+        {
+            tasksApi.getTasksByUserId(userId)
+        }
     }
-
 }

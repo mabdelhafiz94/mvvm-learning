@@ -18,7 +18,7 @@ fun Throwable?.parseException(): String {
         } else if (this.code() == 409) {
             "Server Conflict!"
         } else {
-            val responseBody = this.response().errorBody()
+            val responseBody = this.response()?.errorBody()
             val errorJson = getErrorMessage(responseBody)
             Log.i(TAG, errorJson)
             "Generic server error"

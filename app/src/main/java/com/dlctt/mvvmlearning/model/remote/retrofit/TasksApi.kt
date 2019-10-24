@@ -10,6 +10,6 @@ interface TasksApi {
     fun getAllTasks(): Single<List<Task>>
 
     @GET("todos")
-    fun getTasksByUserId(@Query("userId") userId: Int): Single<List<Task>>
+    suspend fun getTasksByUserId(@Query("userId") userId: Int): List<Task>
 
 }

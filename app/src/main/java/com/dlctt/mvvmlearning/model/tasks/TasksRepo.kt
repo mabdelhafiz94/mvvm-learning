@@ -15,11 +15,11 @@ class TasksRepo(private val tasksRemoteDataSource: TasksDataSource) :
             Single.just(ArrayList())
     }
 
-    override fun getTasksByUserId(userId: Int): Single<List<Task>> {
+    override suspend fun getTasksByUserId(userId: Int): List<Task> {
 
         return if (online)
             tasksRemoteDataSource.getTasksByUserId(userId)
         else
-            Single.just(ArrayList())
+            emptyList()
     }
 }

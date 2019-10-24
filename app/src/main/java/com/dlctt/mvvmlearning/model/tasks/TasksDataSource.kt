@@ -7,6 +7,6 @@ interface TasksDataSource {
 
     fun getTasks(): Single<List<Task>>
 
-    fun getTasksByUserId(userId: Int): Single<List<Task>>
+    suspend fun getTasksByUserId(userId: Int): List<Task>
 
 }

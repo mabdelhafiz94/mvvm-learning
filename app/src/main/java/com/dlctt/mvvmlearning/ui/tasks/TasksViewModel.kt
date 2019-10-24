@@ -2,6 +2,7 @@ package com.dlctt.mvvmlearning.ui.tasks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.local.LocalDataSource
@@ -14,6 +15,7 @@ import com.dlctt.mvvmlearning.utils.parseException
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 
 /**
  * Created by abdelhafiz on 9/25/19.
@@ -31,21 +33,25 @@ class TasksViewModel : BaseViewModel() {
     }
 
     private fun loadTasks() {
-        tasksRepo.getTasksByUserId(userSession.userId)
-            .subscribe(object : SingleObserver<List<Task>> {
-                override fun onSuccess(t: List<Task>) {
-                    handleResult(Result.Success(t))
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    compositeDisposable.add(d)
-                    handleResult(Result.Loading())
-                }
-
-                override fun onError(e: Throwable) {
-                    handleResult(Result.Error(e))
-                }
-            })
+        handleResult(Result.Loading())
+        viewModelScope.launch {
+            val tasks = tasksRepo.getTasksByUserId(userSession.userId)
+            handleResult(Result.Success(tasks))
+        }
+//            .subscribe(object : SingleObserver<List<Task>> {
+//                override fun onSuccess(t: List<Task>) {
+//                    handleResult(Result.Success(t))
+//                }
+//
+//                override fun onSubscribe(d: Disposable) {
+//                    compositeDisposable.add(d)
+//                    handleResult(Result.Loading())
+//                }
+//
+//                override fun onError(e: Throwable) {
+//                    handleResult(Result.Error(e))
+//                }
+//            })
     }
 
     private fun handleResult(result: Result<List<Task>>) {
