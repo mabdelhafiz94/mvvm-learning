@@ -1,6 +1,7 @@
 package com.dlctt.mvvmlearning.utils
 
 import android.util.Log
+import com.dlctt.mvvmlearning.model.DTO.Result
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 import java.io.IOException
@@ -39,4 +40,12 @@ private fun getErrorMessage(responseBody: ResponseBody?): String {
         e.message ?: e.toString()
     }
 
+}
+
+inline fun <T> tryCatch(block: () -> Result<T>): Result<T> {
+    return try {
+        block()
+    } catch (ex: Exception) {
+        Result.Error(ex)
+    }
 }
