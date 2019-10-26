@@ -1,8 +1,9 @@
 package com.dlctt.mvvmlearning.model.remote
 
+import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.Task
-import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
 import com.dlctt.mvvmlearning.model.remote.retrofit.TasksApi
+import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,10 +18,13 @@ class TasksRemoteDataSource(private val tasksApi: TasksApi) :
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override suspend fun getTasksByUserId(userId: Int): List<Task> {
-        return withContext(Dispatchers.IO)
-        {
-            tasksApi.getTasksByUserId(userId)
+    override suspend fun getTasksByUserId(userId: Int): Result<List<Task>> {
+        return try {
+            withContext(Dispatchers.IO) {
+                Result.Success(tasksApi.getTasksByUserId(userId))
+            }
+        } catch (ex: Exception) {
+            Result.Error(ex)
         }
     }
 }
