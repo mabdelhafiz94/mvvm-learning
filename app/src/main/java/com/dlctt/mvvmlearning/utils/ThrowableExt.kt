@@ -1,7 +1,6 @@
 package com.dlctt.mvvmlearning.utils
 
 import android.util.Log
-import com.dlctt.mvvmlearning.model.DTO.Result
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 import java.io.IOException

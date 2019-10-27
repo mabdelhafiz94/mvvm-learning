@@ -9,7 +9,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 
 class TasksRemoteDataSource(private val tasksApi: TasksApi) : TasksDataSource {
