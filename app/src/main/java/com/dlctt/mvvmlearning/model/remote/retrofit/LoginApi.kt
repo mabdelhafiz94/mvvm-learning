@@ -9,5 +9,5 @@ import retrofit2.http.Query
 interface LoginApi {
 
     @GET("users")
-    fun loginById(@Query("id") id: Int): Single<List<User>>
+    suspend fun loginById(@Query("id") id: Int): List<User>
 }

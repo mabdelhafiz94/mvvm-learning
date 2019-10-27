@@ -5,7 +5,7 @@ sealed class Result<out T>(
     val exception: Throwable? = null
 ) {
     class Success<T>(data: T) : Result<T>(data)
-    class Error<T>(exception: Throwable) : Result<T>(null, exception)
+    class Error(exception: Throwable) : Result<Nothing>(null, exception)
     class Loading : Result<Nothing>()
 
     fun isSucceeded(): Boolean {

@@ -3,6 +3,7 @@ package com.dlctt.mvvmlearning.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.User
 import com.dlctt.mvvmlearning.model.local.UserSession
@@ -14,6 +15,7 @@ import com.dlctt.mvvmlearning.utils.parseException
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 
 class LoginViewModel : BaseViewModel() {
     private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
@@ -43,7 +45,13 @@ class LoginViewModel : BaseViewModel() {
     }
 
     fun login(userId: String) {
-        loginRepo.loginById(userId.toInt()).subscribe(object : SingleObserver<List<User>> {
+
+        handleResult(Result.Loading())
+        viewModelScope.launch {
+            val result = loginRepo.loginById(userId.toInt())
+            handleResult(result)
+        }
+/*.subscribe(object : SingleObserver<List<User>> {
             override fun onSuccess(usersList: List<User>) {
                 val result: Result<List<User>> = if (usersList.isEmpty())
                     Result.Error(Exception("Wrong user id"))
@@ -61,7 +69,7 @@ class LoginViewModel : BaseViewModel() {
             override fun onError(e: Throwable) {
                 handleResult(Result.Error(e))
             }
-        })
+        })*/
     }
 
     private fun handleResult(result: Result<List<User>>) {

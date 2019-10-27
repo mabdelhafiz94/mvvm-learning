@@ -12,14 +12,12 @@ import com.dlctt.mvvmlearning.utils.BaseViewModel
 import com.dlctt.mvvmlearning.utils.Event
 import com.dlctt.mvvmlearning.utils.ServiceLocator
 import com.dlctt.mvvmlearning.utils.parseException
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
 /**
  * Created by abdelhafiz on 9/25/19.
  */
 class TasksViewModel : BaseViewModel() {
-    private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
     private val userSession: UserSession = UserSession
 
     private val tasksRepo: TasksDataSource by lazy { ServiceLocator.getInstance().tasksRepo }
@@ -53,11 +51,6 @@ class TasksViewModel : BaseViewModel() {
     fun getTasksLiveData(): LiveData<List<Task>> = tasksLiveData
 
     fun navigateToTaskDetails(): LiveData<Event<Boolean>> = navigateToTaskDetails
-
-    override fun onCleared() {
-        compositeDisposable.clear()
-        super.onCleared()
-    }
 
     fun onTaskSelected(item: Task) {
         LocalDataSource.selectedTaskId = item.id
