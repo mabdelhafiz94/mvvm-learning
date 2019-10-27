@@ -41,11 +41,3 @@ private fun getErrorMessage(responseBody: ResponseBody?): String {
     }
 
 }
-
-inline fun <T> tryCatch(block: () -> Result<T>): Result<T> {
-    return try {
-        block()
-    } catch (ex: Exception) {
-        Result.Error(ex)
-    }
-}

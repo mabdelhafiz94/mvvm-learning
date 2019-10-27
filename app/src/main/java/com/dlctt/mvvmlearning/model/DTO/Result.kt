@@ -13,3 +13,11 @@ sealed class Result<out T>(
     }
 
 }
+
+inline fun <T> tryCatch(block: () -> Result<T>): Result<T> {
+    return try {
+        block()
+    } catch (ex: Exception) {
+        Result.Error(ex)
+    }
+}
