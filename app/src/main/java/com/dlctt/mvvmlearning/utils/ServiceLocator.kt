@@ -4,11 +4,11 @@ import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
 import com.dlctt.mvvmlearning.model.tasks.TasksRepo
 import com.dlctt.mvvmlearning.model.login.LoginDataSource
 import com.dlctt.mvvmlearning.model.login.LoginRepo
-import com.dlctt.mvvmlearning.model.remote.TasksRemoteDataSource
-import com.dlctt.mvvmlearning.model.remote.retrofit.LoginApi
-import com.dlctt.mvvmlearning.model.remote.retrofit.ServiceBuilder
-import com.dlctt.mvvmlearning.model.remote.retrofit.TasksApi
-import com.dlctt.mvvmlearning.model.remote.LoginRemoteDataSource
+import com.dlctt.mvvmlearning.model.tasks.TasksRemoteDataSource
+import com.dlctt.mvvmlearning.model.api.LoginApi
+import com.dlctt.mvvmlearning.model.api.ServiceBuilder
+import com.dlctt.mvvmlearning.model.api.TasksApi
+import com.dlctt.mvvmlearning.model.login.LoginRemoteDataSource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 

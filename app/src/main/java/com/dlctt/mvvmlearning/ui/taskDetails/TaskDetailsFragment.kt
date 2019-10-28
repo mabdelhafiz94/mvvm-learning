@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.databinding.FragmentTaskDetailsBinding
+import com.dlctt.mvvmlearning.utils.Constants
 import com.dlctt.mvvmlearning.utils.observeMessages
 
 /**
@@ -16,8 +17,13 @@ import com.dlctt.mvvmlearning.utils.observeMessages
  */
 class TaskDetailsFragment : Fragment() {
     private lateinit var viewBinding: FragmentTaskDetailsBinding
-    private val viewModel: TaskDetailsViewModel by lazy {
-        ViewModelProviders.of(this).get(TaskDetailsViewModel::class.java)
+
+    private val viewModelFactory by lazy {
+        TaskDetailsViewModelFactory(arguments?.getInt(Constants.TASK_ID, 0) ?: 0)
+    }
+
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(TaskDetailsViewModel::class.java)
     }
 
     override fun onCreateView(

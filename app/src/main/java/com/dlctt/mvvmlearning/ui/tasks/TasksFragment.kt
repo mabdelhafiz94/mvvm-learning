@@ -16,6 +16,7 @@ import com.dlctt.mvvmlearning.R
 import com.dlctt.mvvmlearning.databinding.FragmentTasksBinding
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.ui.taskDetails.TaskDetailsFragment
+import com.dlctt.mvvmlearning.utils.Constants
 import com.dlctt.mvvmlearning.utils.ListItemCallback
 import com.dlctt.mvvmlearning.utils.navigateToFragment
 import com.dlctt.mvvmlearning.utils.observeMessages
@@ -62,7 +63,6 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
     private fun observeViewModel() {
         observeMessages(false, viewModel.getDialogMessage())
         observeTasks()
-        observeNavigation()
     }
 
     private fun observeTasks() {
@@ -73,25 +73,23 @@ class TasksFragment : Fragment(), ListItemCallback<Task> {
         })
     }
 
-    private fun observeNavigation() {
-        viewModel.navigateToTaskDetails().observe(viewLifecycleOwner, Observer { event ->
-            event?.getContent()?.let { navigate ->
-                if (navigate)
-                    navigateToDetailsScreen()
-            }
-        })
-    }
+    private fun navigateToDetailsScreen(taskId: Int) {
+        Bundle().also { arguments ->
+            arguments.putInt(Constants.TASK_ID, taskId)
 
-    private fun navigateToDetailsScreen() {
-        (activity as AppCompatActivity).navigateToFragment(
-            TaskDetailsFragment(),
-            false,
-            R.id.fragments_main_container
-        )
+            TaskDetailsFragment().also { fragment ->
+                fragment.arguments = arguments
+
+                (activity as AppCompatActivity).navigateToFragment(
+                    fragment, false,
+                    R.id.fragments_main_container
+                )
+            }
+        }
     }
 
     override fun onItemClicked(item: Task) {
-        viewModel.onTaskSelected(item)
+        navigateToDetailsScreen(item.id)
     }
 
 }

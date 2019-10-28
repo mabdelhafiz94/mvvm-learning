@@ -1,4 +1,4 @@
-package com.dlctt.mvvmlearning.model.remote.retrofit
+package com.dlctt.mvvmlearning.model.api
 
 import com.dlctt.mvvmlearning.model.DTO.Task
 import io.reactivex.Single

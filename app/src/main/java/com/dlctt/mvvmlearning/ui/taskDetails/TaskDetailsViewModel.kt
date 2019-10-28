@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.Task
-import com.dlctt.mvvmlearning.model.local.LocalDataSource
 import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
 import com.dlctt.mvvmlearning.utils.BaseViewModel
 import com.dlctt.mvvmlearning.utils.Event
@@ -17,7 +16,7 @@ import io.reactivex.disposables.Disposable
 /**
  * Created by abdelhafiz on 10/23/19.
  */
-class TaskDetailsViewModel : BaseViewModel() {
+class TaskDetailsViewModel(private val taskId: Int) : BaseViewModel() {
     private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
 
     private val tasksRepo: TasksDataSource by lazy { ServiceLocator.getInstance().tasksRepo }
@@ -43,7 +42,7 @@ class TaskDetailsViewModel : BaseViewModel() {
 
     private fun newTask(): Boolean {
         val currTaskId = taskDetailsLiveData.value?.id ?: -1
-        return (currTaskId == -1 || currTaskId != LocalDataSource.selectedTaskId)
+        return (currTaskId == -1 || currTaskId != taskId)
     }
 
     private fun handleResult(result: Result<List<Task>>) {
@@ -56,7 +55,7 @@ class TaskDetailsViewModel : BaseViewModel() {
         if (result is Result.Success && result.data != null) {
             try {
                 taskDetailsLiveData.value =
-                    result.data.first { task -> task.id == LocalDataSource.selectedTaskId }
+                    result.data.first { task -> task.id == taskId }
             } catch (ex: NoSuchElementException) {
             }
         }

@@ -1,4 +1,4 @@
-package com.dlctt.mvvmlearning.model.remote.retrofit.interceptors
+package com.dlctt.mvvmlearning.model.api.interceptors
 
 import android.util.Log
 import okhttp3.Interceptor

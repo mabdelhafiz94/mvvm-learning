@@ -1,10 +1,9 @@
-package com.dlctt.mvvmlearning.model.remote
+package com.dlctt.mvvmlearning.model.tasks
 
 import com.dlctt.mvvmlearning.model.DTO.Result
 import com.dlctt.mvvmlearning.model.DTO.Task
 import com.dlctt.mvvmlearning.model.DTO.tryCatch
-import com.dlctt.mvvmlearning.model.remote.retrofit.TasksApi
-import com.dlctt.mvvmlearning.model.tasks.TasksDataSource
+import com.dlctt.mvvmlearning.model.api.TasksApi
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

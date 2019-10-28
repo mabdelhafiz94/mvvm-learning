@@ -1,6 +1,6 @@
-package com.dlctt.mvvmlearning.model.remote.retrofit
+package com.dlctt.mvvmlearning.model.api
 
-import com.dlctt.mvvmlearning.model.remote.retrofit.interceptors.LoggingInterceptor
+import com.dlctt.mvvmlearning.model.api.interceptors.LoggingInterceptor
 import com.dlctt.mvvmlearning.utils.Constants
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -30,7 +30,8 @@ object ServiceBuilder {
     fun <S> buildService(serviceClass: Class<S>, gson: Gson): S {
 
         initRetrofitBuilder(gson)
-        val retrofit = retrofitBuilder!!.client(httpClient.build()).build()
+        val retrofit = retrofitBuilder!!.client(
+            httpClient.build()).build()
         return retrofit.create(serviceClass)
     }
 
