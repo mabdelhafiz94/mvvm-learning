@@ -5,8 +5,7 @@ import com.dlctt.mvvmlearning.model.DTO.Task
 import io.reactivex.Single
 
 interface TasksDataSource {
-
-    fun getTasks(): Single<List<Task>>
+    suspend fun getTasks(): Result<List<Task>>
 
     suspend fun getTasksByUserId(userId: Int): Result<List<Task>>
 
